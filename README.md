@@ -47,7 +47,6 @@ The board has been verified with the Zephyr OpenOCD runner and the onboard CMSIS
 From the west workspace root:
 
 ```sh
-source .venv/bin/activate
 west build -d /private/tmp/m2devkit-local-flash-build -p always -b nrf52840_m2 nrf52840-m2-devkit
 west flash -d /private/tmp/m2devkit-local-flash-build --runner openocd
 ```
