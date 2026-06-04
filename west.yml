@@ -1,0 +1,30 @@
+# West manifest for the minimal nRF52840 M.2 Developer Kit application.
+# Pins Zephyr upstream v4.4.0 and imports the matching Zephyr modules,
+# including Nordic HAL support from hal_nordic.
+
+manifest:
+  version: "0.13"
+
+  remotes:
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos
+
+  defaults:
+    remote: zephyrproject
+
+  projects:
+    - name: zephyr
+      repo-path: zephyr
+      revision: v4.4.0
+      import:
+        name-allowlist:
+          - cmsis
+          - cmsis_6
+          - hal_nordic
+          - mbedtls
+          - picolibc
+          - segger
+          - tf-psa-crypto
+
+  self:
+    path: nrf52840-m2-devkit

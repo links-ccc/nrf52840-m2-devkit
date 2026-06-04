@@ -1,0 +1,11 @@
+# nRF52840 M.2 Developer Kit board configuration
+
+# Copyright (c) 2020 makerdiary
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_NRF52840_M2
+
+config HW_STACK_PROTECTION
+	default ARCH_HAS_STACK_PROTECTION
+
+endif # BOARD_NRF52840_M2
