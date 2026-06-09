@@ -1,0 +1,16 @@
+sample:
+  name: nRF52840 M.2 display sample
+  description: Animated ST7789V color pattern on the nRF52840 M.2 Developer Kit TFT
+tests:
+  sample.display.nrf52840_m2:
+    platform_allow:
+      - nrf52840_m2/nrf52840
+    tags:
+      - display
+      - spi
+      - pwm
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "Display ready:"

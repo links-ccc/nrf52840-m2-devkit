@@ -61,9 +61,12 @@
 		group1 {
 			psels = <NRF_PSEL(PWM_OUT0, 0, 30)>,
 				<NRF_PSEL(PWM_OUT1, 0, 29)>,
-				<NRF_PSEL(PWM_OUT2, 0, 31)>,
-				<NRF_PSEL(PWM_OUT3, 0, 20)>;
+				<NRF_PSEL(PWM_OUT2, 0, 31)>;
 			nordic,invert;
+		};
+
+		group2 {
+			psels = <NRF_PSEL(PWM_OUT3, 0, 20)>;
 		};
 	};
 
@@ -73,6 +76,22 @@
 				<NRF_PSEL(PWM_OUT1, 0, 29)>,
 				<NRF_PSEL(PWM_OUT2, 0, 31)>,
 				<NRF_PSEL(PWM_OUT3, 0, 20)>;
+			low-power-enable;
+		};
+	};
+
+	spi3_default: spi3_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 11)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 12)>;
+			nordic,drive-mode = <NRF_DRIVE_H0H1>;
+		};
+	};
+
+	spi3_sleep: spi3_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 11)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 12)>;
 			low-power-enable;
 		};
 	};

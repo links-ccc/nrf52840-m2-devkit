@@ -7,6 +7,7 @@ It contains:
 - A Zephyr 4.4 west manifest pinned to `zephyrproject-rtos/zephyr@v4.4.0`.
 - An out-of-tree board definition for `nrf52840_m2`.
 - A small layered application that prints a boot message and blinks `led0`.
+- A `samples/display` application that drives the onboard ST7789V TFT.
 - Project-owned `include/`, `drivers/`, and `soc/` trees for board-specific code.
 
 The original examples, generated firmware images, documentation site, Python examples, nRF5 SDK examples, and USB driver packages have been removed.
@@ -18,6 +19,7 @@ boards/makerdiary/nrf52840_m2/  Zephyr board definition, DTS, pinctrl, partition
 include/m2devkit/               Public project headers
 drivers/status_led/             Project-owned status LED driver wrapper
 soc/                            Project SoC/board capability layer for nRF52840 M.2
+samples/display/                ST7789V TFT color-pattern sample
 src/                            Application entry point
 ```
 
@@ -47,6 +49,7 @@ The board has been verified with the Zephyr OpenOCD runner and the onboard CMSIS
 From the west workspace root:
 
 ```sh
+source .venv/bin/activate
 west build -d /private/tmp/m2devkit-local-flash-build -p always -b nrf52840_m2 nrf52840-m2-devkit
 west flash -d /private/tmp/m2devkit-local-flash-build --runner openocd
 ```
