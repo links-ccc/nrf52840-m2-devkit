@@ -1,30 +1,46 @@
 # West manifest for the minimal nRF52840 M.2 Developer Kit application.
-# Pins Zephyr upstream v4.4.0 and imports the matching Zephyr modules,
-# including Nordic HAL support from hal_nordic.
+#
+# nRF Connect SDK v3.4.0-rc1 is the Nordic SDK tag whose downstream
+# sdk-zephyr tag is Zephyr 4.4.0. Import Zephyr and the Nordic modules through
+# the NCS manifest so their Kconfig/CMake dependencies stay version-aligned.
 
 manifest:
   version: "0.13"
 
   remotes:
-    - name: zephyrproject
-      url-base: https://github.com/zephyrproject-rtos
+    - name: ncs
+      url-base: https://github.com/nrfconnect
 
   defaults:
-    remote: zephyrproject
+    remote: ncs
 
   projects:
     - name: zephyr
-      repo-path: zephyr
-      revision: v4.4.0
+      repo-path: sdk-zephyr
+      revision: ncs-v3.4.0-rc1
+      clone-depth: 1
       import:
         name-allowlist:
           - cmsis
           - cmsis_6
           - hal_nordic
-          - mbedtls
+          - hostap
           - picolibc
           - segger
           - tf-psa-crypto
+          - zcbor
+    - name: nrf
+      repo-path: sdk-nrf
+      revision: v3.4.0-rc1
+      path: nrf
+      clone-depth: 1
+      west-commands: scripts/west-commands.yml
+      import:
+        name-allowlist:
+          - mbedtls
+          - mcuboot
+          - nrfxlib
+          - oberon-psa-crypto
 
   self:
     path: nrf52840-m2-devkit

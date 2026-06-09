@@ -7,7 +7,9 @@ The board devicetree provides the ST7789V display as `zephyr,display` and the LC
 Build from the repository root:
 
 ```sh
-west build -d /private/tmp/m2devkit-display-sample-build -p always -b nrf52840_m2 samples/display
+west build -d /private/tmp/m2devkit-display-sample-build -p always \
+  -b nrf52840_m2 samples/display -- \
+  -DBOARD_ROOT=$PWD
 ```
 
 Flash with the onboard CMSIS-DAP probe:

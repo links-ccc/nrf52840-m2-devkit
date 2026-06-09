@@ -4,7 +4,8 @@ This repository is trimmed to the code needed to build a Zephyr application for 
 
 It contains:
 
-- A Zephyr 4.4 west manifest pinned to `zephyrproject-rtos/zephyr@v4.4.0`.
+- A Zephyr 4.4 west manifest pinned to Nordic `nrfconnect/sdk-zephyr@ncs-v3.4.0-rc1`.
+- Nordic nRF Connect SDK modules from `nrfconnect/sdk-nrf@v3.4.0-rc1`.
 - An out-of-tree board definition for `nrf52840_m2`.
 - A small layered application that prints a boot message and blinks `led0`.
 - A `samples/display` application that drives the onboard ST7789V TFT.
@@ -33,13 +34,17 @@ From the west workspace root:
 west update
 west zephyr-export
 pip install -r zephyr/scripts/requirements.txt
-west build -b nrf52840_m2 nrf52840-m2-devkit
+west build -d /private/tmp/m2devkit-local-build -p always \
+  -b nrf52840_m2 nrf52840-m2-devkit -- \
+  -DBOARD_ROOT=$PWD/nrf52840-m2-devkit
 ```
 
 Or from this repository:
 
 ```sh
-west build -b nrf52840_m2 .
+west build -d /private/tmp/m2devkit-local-build -p always \
+  -b nrf52840_m2 . -- \
+  -DBOARD_ROOT=$PWD
 ```
 
 ## Flash
@@ -50,11 +55,13 @@ From the west workspace root:
 
 ```sh
 source .venv/bin/activate
-west build -d /private/tmp/m2devkit-local-flash-build -p always -b nrf52840_m2 nrf52840-m2-devkit
+west build -d /private/tmp/m2devkit-local-flash-build -p always \
+  -b nrf52840_m2 nrf52840-m2-devkit -- \
+  -DBOARD_ROOT=$PWD/nrf52840-m2-devkit
 west flash -d /private/tmp/m2devkit-local-flash-build --runner openocd
 ```
 
-The flash log should identify a CMSIS-DAP probe and an `nRF52840-xxAA` target, then write `zephyr/zephyr.hex`.
+The flash log should identify a CMSIS-DAP probe and an `nRF52840-xxAA` target, then write the sysbuild `merged.hex`.
 
 ## Runtime smoke test
 
@@ -64,7 +71,7 @@ Find the heartbeat symbol address:
 
 ```sh
 /Users/links/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-nm -n \
-  /private/tmp/m2devkit-local-flash-build/zephyr/zephyr.elf | rg m2devkit_smoke_heartbeat
+  /private/tmp/m2devkit-local-flash-build/nrf52840-m2-devkit/zephyr/zephyr.elf | rg m2devkit_smoke_heartbeat
 ```
 
 Read it after reset/run with the Zephyr SDK OpenOCD:
@@ -80,15 +87,15 @@ Read it after reset/run with the Zephyr SDK OpenOCD:
   -c 'reset run' \
   -c 'sleep 1800' \
   -c 'halt' \
-  -c 'mdw 0x20000280 1' \
+  -c 'mdw 0x20000370 1' \
   -c 'reset run' \
   -c 'shutdown'
 ```
 
-A non-zero value at the heartbeat address confirms that the firmware entered the main loop. The hardware smoke test observed `0x20000280: 00000007` after about 1.8 seconds.
+A non-zero value at the heartbeat address confirms that the firmware entered the main loop.
 
 ## Notes
 
 The board keeps the original stock flash layout used by the factory Nordic MBR/nRF5 bootloader. The application slot starts at `0x10000`, matching the legacy project layout.
 
-Nordic nRF HAL support is imported through Zephyr 4.4's official west manifest via `hal_nordic`.
+The manifest uses nRF Connect SDK `v3.4.0-rc1` because its downstream `sdk-zephyr` tag reports Zephyr `4.4.0`.
